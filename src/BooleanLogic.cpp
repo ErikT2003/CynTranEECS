@@ -5,7 +5,7 @@
 #include <map>
 using namespace std;
 bool BooleanLogic::unknown_var_error_check(char var) {
-  if (!(var == '(' || var == ')' || var == '&' || var == '|' || var == '!' || var == '@' || var == '$' || var == 'F' || var == 'T' || var == ' '))
+  if (!(var == '(' || var == ')' || var == '&' || var == '|' || var == '!' || var == '@' || var == '$' || var == 'F' || var == 'T' || var == ' ' || var == '*' || var == '%'))
   {
     cout << "Invalid Symbol: "<< var << endl;
     return false;
@@ -48,10 +48,14 @@ bool BooleanLogic::evaluateBoolean(char op, bool operand1, bool operand2) {
             return operand1 && operand2; // AND
         case '|':
             return operand1 || operand2; // OR
+        case '%':
+            return operand1 == false && operand2 == false; // NOR
         case '!':
             return !operand1; // NOT
         case '$':
             return operand1 != operand2; // XOR
+        case '*':
+            return !(operand1 != operand2); //XNOR
         case '@':
             return !(operand1 && operand2); // NAND
         default:
@@ -99,7 +103,7 @@ bool BooleanLogic::evaluateExpression(string expr) {
                 }
             }
             ops.pop(); // Pop '('
-        } else if (c == '&' || c == '|' || c == '!' || c == '$' || c == '@') {
+        } else if (c == '&' || c == '|' || c == '!' || c == '$' || c == '@' || c == '*' || c == '%') {
             while (!ops.empty() && precedence[c] <= precedence[ops.top()] && ops.top() != '(') {
                 char op = ops.top();
                 ops.pop();
